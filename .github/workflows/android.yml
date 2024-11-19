@@ -27,17 +27,17 @@ jobs:
 
     # Step 3: Set up Android NDK
     - name: Setup Android NDK
-      id: ndk
-      uses: RaphaelTheriault/setup-android-ndk@v1
+      id: setup-ndk
+      uses: nttld/setup-ndk@v1
       with:
-        ndk-version: "23.1.7779620"
+        ndk-version: r26d
 
     # Step 4: Build and Test
     - name: Build and Test
       env:
-        ANDROID_NDK_HOME: ${{ steps.ndk.outputs.android-ndk-path }}
-        CC_aarch64_linux_android: ${{ steps.ndk.outputs.android-ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
-        CXX_aarch64_linux_android: ${{ steps.ndk.outputs.android-ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++
+        ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.android-ndk-path }}
+        CC_aarch64_linux_android: ${{ steps.setup-ndk.outputs.android-ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
+        CXX_aarch64_linux_android: ${{ steps.setup-ndk.outputs.android-ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++
       run: |
         rustup target add aarch64-linux-android
         cargo build --target aarch64-linux-android
